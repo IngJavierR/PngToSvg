@@ -26,7 +26,9 @@ def rgba_image_to_svg_pixels(im, opaque=None):
 
 def main():
     image = Image.open('examples/angular.png').convert('RGB')
-    print(rgba_image_to_svg_pixels(image))
+    svg_image = rgba_image_to_svg_pixels(image)
+    with open("examples/Angular.svg", "w") as text_file:
+        text_file.write(svg_image)
 
 if __name__ == '__main__':
     main()
