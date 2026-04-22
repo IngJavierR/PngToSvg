@@ -1,3 +1,5 @@
+import sys, os
+from pathlib import Path
 from PIL import Image
 import operator
 from collections import deque
@@ -183,11 +185,20 @@ def rgba_image_to_svg_pixels(im, opaque=None):
     return s.getvalue()
 
 def main():
-    image = Image.open('examples/angular.png').convert('RGBA')
-    svg_image = rgba_image_to_svg_contiguous(image)
-    #svg_image = rgba_image_to_svg_pixels(image)
-    with open("examples/angular.svg", "w") as text_file:
-        text_file.write(svg_image)
+    input_dir = Path(sys.argv[1])
+    output_dir = Path(sys.argv[2])
+    output_dir.mkdir(exist_ok=True)
+
+    for file in input_dir.iterdir():
+        if file.suffix.lower() not in [".png", ".jpg", ".jpeg"]:
+            continue
+
+        image = Image.open(file).convert("RGBA")
+        svg_image = rgba_image_to_svg_contiguous(image)
+
+        output_file = output_dir / (file.stem + ".svg")
+        with open(output_file, "w") as f:
+            f.write(svg_image)
 
 if __name__ == '__main__':
     main()
